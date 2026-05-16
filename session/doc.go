@@ -1,16 +1,28 @@
-// Copyright 2025 Google LLC
+// Package session provides in-memory session management for ADK agents.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// A session represents a single, stateful interaction context between a user
+// and an agent. Each session is identified by a unique UUID and can carry
+// arbitrary string metadata (e.g. user identity, locale, or conversation
+// flags) that persists for the lifetime of the session.
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+// # Basic usage
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Package session provides types to manage user sessions and their states.
+//	store := session.NewStore()
+//
+//	// Start a new session for an agent.
+//	sess := store.Create("my-agent")
+//
+//	// Attach metadata.
+//	_ = store.SetMeta(sess.ID, "user", "alice")
+//
+//	// Retrieve the session later.
+//	s, err := store.Get(sess.ID)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//
+//	// Clean up when done.
+//	_ = store.Delete(s.ID)
+//
+// The Store is safe for concurrent use by multiple goroutines.
 package session
